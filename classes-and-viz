@@ -1,0 +1,33 @@
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+pd.set_option('display.max_rows', None)
+pd.set_option('display.max_columns', None)
+
+#importing the GSheet with player data, which was initially built by hand
+sheet_id = '1JWqQWoKkkPr5yc35f4jucTsljqZEO4jdOVuTGxssVkI'
+
+df = pd.read_csv(f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv")
+
+#The DF has more info than needed, so I'll trim it so age and team (two things likely to change) are eliminated
+df = df.loc[:,['Player', 'Eligible', 'Age at End of Contract', 'Salary', 'Contract End']]
+
+#then split this DF up into free agent classes (ie class of 24, 25, etc.)
+
+class24 = df[df['Contract End'] == 2024]
+class25 = df[df['Contract End'] == 2025]
+class26 = df[df['Contract End'] == 2026]
+class27 = df[df['Contract End'] == 2027]
+class28 = df[df['Contract End'] == 2028]
+class29 = df[df['Contract End'] == 2029]
+
+sns.set_theme(style="whitegrid")
+plt.figure(figsize=(8, 8))
+
+df = df.loc[:,['Salary', 'Contract End',]]
+
+sns.boxenplot(
+    df, x="Contract End", y="Salary").set_title("Salaries of the Upcoming FA Classes");
+plt.show()
